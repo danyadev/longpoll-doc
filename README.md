@@ -3,7 +3,7 @@
 ### План документации:
 1. [Подключение](https://github.com/danyadev/longpoll-doc#подключение)
 2. [Возвращаемые ошибки](https://github.com/danyadev/longpoll-doc#возвращаемые-ошибки)
-3. [Получение устаревшей истории событий](получение устаревшей истории событий)
+3. [Получение устаревшей истории событий](https://github.com/danyadev/longpoll-doc#получение-устаревшей-истории-событий)
 4. [Структура событий](https://github.com/danyadev/longpoll-doc#структура-событий)
 5. [Дополнительные данные](https://github.com/danyadev/longpoll-doc#дополнительные-данные)
  * Флаги сообщений
@@ -20,7 +20,7 @@ Long Polling - это способ получения событий в реал
 
 > https://**`server`**?act=a_check&key=**`key`**&ts=**`ts`**&wait=**`wait`**&mode=**`mode`**&version=**`version`**
 
-* `server`, `key` и `ts` получаются методом [`messages.getLongPollServer`](messages.getLongPollServer)
+* `server`, `key` и `ts` получаются методом [`messages.getLongPollServer`](https://vk.com/dev/messages.getLongPollServer)
 * `version` - Версия Long Poll
 * `wait` - Время ожидания нового события в секундах
 * `mode` - Дополнительные опции ответа:
@@ -57,9 +57,9 @@ const link = `https://${server}?` + require('querystring').stringify({
 
 ## Возвращаемые ошибки
 
-1. Устарела история событий. Решается [получением и обработкой устаревшей истории событий](получение устаревшей истории событий) и использованием переданного `ts` далее.
-2. Истекло время действия ключа. Решается использованием `key` из метода [`messages.getLongPollServer`](messages.getLongPollServer).
-3. Информация о пользователе утрачена. Решается [получением и обработкой устаревшей истории событий](получение устаревшей истории событий) и использованием `key` и `ts` из метода [`messages.getLongPollServer`](messages.getLongPollServer).
+1. Устарела история событий. Решается [получением и обработкой устаревшей истории событий](https://github.com/danyadev/longpoll-doc#получение-устаревшей-истории-событий) и использованием переданного `ts` далее.
+2. Истекло время действия ключа. Решается использованием `key` из метода [`messages.getLongPollServer`](https://vk.com/dev/messages.getLongPollServer).
+3. Информация о пользователе утрачена. Решается [получением и обработкой устаревшей истории событий](https://github.com/danyadev/longpoll-doc#получение-устаревшей-истории-событий) и использованием `key` и `ts` из метода [`messages.getLongPollServer`](https://vk.com/dev/messages.getLongPollServer).
 4. Передана неправильная версия. Вместе с ошибкой передаются поля `min_version` и `max_version`, так что проблем здесь не возникнет.
 
 ## Получение устаревшей истории событий
@@ -67,6 +67,3 @@ const link = `https://${server}?` + require('querystring').stringify({
 ## Структура событий
 
 ## Дополнительные данные
-
-[получение устаревшей истории событий]: https://github.com/danyadev/longpoll-doc#получение-устаревшей-истории-событий
-[messages.getLongPollServer]: https://vk.com/dev/messages.getLongPollServer
