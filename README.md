@@ -11,6 +11,7 @@
    - [Флаги сообщений](#флаги-сообщений)
    - [Сервисные сообщения](#сервисные-сообщения)
    - [Клавиатура для ботов](#клавиатура-для-ботов)
+   - [Вложения](#вложения)
 
 Документация написана для __11__ версии Long Poll.
 
@@ -119,7 +120,7 @@ const link = `https://${server}?` + require('querystring').stringify({
 - [Flags](#флаги-сообщений) - Флаги сообщений
 - [Keyboard](#клавиатура-для-ботов) - Клавиатура для ботов (в том числе инлайн)
 - [Action](#сервисные-сообщения) - Сервисное сообщение
-- Attachments - Вложения
+- [Attachments](#вложения) - Вложения
 
 ```js
 [
@@ -133,7 +134,7 @@ const link = `https://${server}?` + require('querystring').stringify({
     title?: ' ... ', // Приходит только в лс
     emoji?: '1', // Наличие emoji (кто бы мог подумать...)
     from?: String, // id автора сообщения. Приходит только в беседах
-    fwd_count?: Number, // В последнее время не приходит..
+    fwd_count?: Number, // На данный момент перестал приходить, но скоро вернется
     has_template?: '1', // Наличие карусели
     mentions?: Array, // Массив с id людей, которых пушнули или ответили на их сообщения
     marked_users?: Array, // Плохой аналог mentions, игнорируем
@@ -258,3 +259,50 @@ const mask = 1 | 2 | 32;
   buttons: Array // Массив с массивами кнопок
 }
 ```
+
+### Вложения
+
+__Спойлер:__ Скоро формат ответа может измениться.
+
+Список известных на данный момент вложений: `geo`, `doc`, `link`, `poll`, `wall`, `call`, `gift`, `story`, `photo`, `audio`, `video`, `point`, `market`, `sticker`, `article`, `podcast`, `graffiti`, `wall_reply`, `audio_message`, `money_request`, `audio_playlist`.
+
+На данный момент вложения передаются достаточно неудобным для обработки способом. Вот пример вложений, состоящих из фотографии, документа и аудиозаписи:
+```js
+{
+  attach1: '88262293_457290160',
+  attach1_type: 'photo',
+  attach2: '88262293_532324610',
+  attach2_type: 'doc',
+  attach3: '88262293_535133534',
+  attach3_kind: 'audiomsg',
+  attach3_type: 'doc'
+}
+```
+
+Для того, чтобы вытащить их названия нужно писать дополнительный код. Однако вытаскивать идентификаторы вложений нет смысла, потому что они не представляют никакой ценности. Чтобы получить нормальную информацию о вложениях, нужно получить сообщение через API, используя метод [`messages.geyById`](https://vk.com/dev/messages.getById). Пример кода для получения массива с названиями вложений на `JavaScript`:
+```js
+function getAttachments(data) {
+  const attachments = [];
+
+  if(data.geo) attachments.push({ type: 'geo' });
+
+  for(const key in data) {
+    const match = key.match(/attach(\d+)$/);
+
+    if(match) {
+      const id = match[1];
+      const kind = data[`attach${id}_kind`];
+      let type = data[`attach${id}_type`];
+
+      if(kind == 'audiomsg') type = 'audio_message';
+      if(kind == 'graffiti') type = 'graffiti';
+
+      attachments.push({ type });
+    }
+  }
+
+  return attachments;
+}
+```
+
+При работе с вложениями можно попробовать найти необходимый элемент в [документации](https://vk.com/dev/objects), однако у некоторых вложений документация не обновлена или вовсе отсутствует.
