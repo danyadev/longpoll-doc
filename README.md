@@ -174,7 +174,7 @@ const link = `https://${server}?` + require('querystring').stringify({
     fwd?: '0_0', // При пересланных сообщениях и ответах на сообщения
     ...attachments // Описание вложений
   },
-  random_id: Number,
+  random_id: Number, // Возвращается, если в mode есть флаг 128
   conversation_message_id: Number, // id сообщения в диалоге peer_id
   edit_time: Number // 0 (не отредактированно) или timestamp (время редактирования)
 ]
