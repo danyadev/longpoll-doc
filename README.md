@@ -193,7 +193,7 @@ const link = `https://${server}?` + require('querystring').stringify({
   {
     // Есть пересланное сообщение или ответ на сообщение
     fwd?: '0_0'
-    // Есть ответ на сообщение; "{"conversation_message_id":NUMBER}"
+    // Ответ на сообщение: '{"conversation_message_id":number}'
     reply?: string
 
     // Видимо только началась разработка выдачи вложений прямо в LongPoll,
