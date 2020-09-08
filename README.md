@@ -75,11 +75,11 @@ const link = `https://${server}?` + require('querystring').stringify({
 После выполнения запроса сервер вернет ответ следующего вида:
 ```ts
 interface LongPollResult {
-  // Приходит когда нет ошибок или при failed: 1
+  // Приходит, если нет ошибок или при failed: 1
   ts?: number
-  // Приходит когда нет ошибок и при наличии флага 32
+  // Приходит, если нет ошибок и при наличии флага 32
   pts?: number
-  // Приходит когда нет ошибок
+  // Приходит, если нет ошибок
   updates?: any[]
   failed?: 1 | 2 | 3 | 4
   // Приходят только при failed: 4
@@ -88,7 +88,7 @@ interface LongPollResult {
 }
 ```
 
-После обработки ответа для продолжения работы Long Poll нужно повторить запрос, перед этим заменив `ts` на новый из ответа.
+После обработки ответа для продолжения работы Long Poll нужно повторить запрос, перед этим заменив `ts` и `pts` на новый из ответа.
 
 ## Возвращаемые ошибки
 
@@ -104,16 +104,16 @@ interface LongPollResult {
 Чтобы получить историю событий, нам необходим `pts`, получение которого включается полем `need_pts: 1` в [`messages.getLongPollServer`](https://vk.com/dev/messages.getLongPollServer) и добавлением в `mode` флага `32` при [выполнении запроса](#подключение).
 
 Для получения истории мы будем использовать метод [`messages.getLongPollHistory`](https://vk.com/dev/messages.getLongPollHistory) с указанием следующих параметров:
-- `ts` - Последний полученный `ts` из LongPoll
 - `pts` - Последний полученный `pts` из LongPoll
-- `msgs_limit` - Максимальное количество передаваемых сообщений. Минимум `200`, рекомендую `500`
-- `max_msg_id` - `id` последнего полученного сообщения из LongPoll
+- `msgs_limit` - Максимальное количество передаваемых сообщений. Минимум `200`, рекомендую `500`, максимум `1000`
 - `onlines` - `1` если возвращать события `8` и `9` ([онлайн](#событие-8-друг-появился-в-сети) и [оффлайн](#событие-9-друг-вышел-из-сети) друга), `0` если нет
 - `lp_version` - Версия LongPoll
 - `fields` - Поля [пользователей и групп](https://vk.com/dev/objects/user), которые могут прийти вместе с историей
 
 Ответ выглядит следующим образом:
 ```ts
+// Все приведенные типы:
+// https://github.com/danyadev/vk-desktop/tree/typescript/src/types
 interface LongPollHistoryResult {
   // Здесь содержатся некоторые события из LongPoll,
   // но вся информация действительно является только числами:
@@ -121,13 +121,13 @@ interface LongPollHistoryResult {
   history: number[][]
   from_pts: number
   new_pts: number
-  conversations: Conversation[]
+  conversations: VKConversation[]
   messages: {
     count: number
-    items: Message[]
+    items: VKMessage[]
   }
-  profiles?: BaseUser[]
-  groups?: BaseGroup[]
+  profiles?: VKUser[]
+  groups?: VKGroup[]
   more?: true
 }
 ```
@@ -138,15 +138,14 @@ interface LongPollHistoryResult {
 - `5` - [Редактирование сообщения](#событие-5-редактирование-сообщения)
 - `18` - [Добавление сниппета к сообщению](#событие-18-добавление-сниппета-к-сообщению)
 
-Структура этих событий выглядит так:
+Структура этих событий выглядит так (все с типом `number`):
 ```
 [event_id, msg_id, flags, peer_id]
 ```
 
-Остальная информация о сообщениях находится в полях `messages` и `conversations` и уже содержит всю информацию о сообщении,
-то есть структура уже из API, а не из LongPoll.
+Всю информацию о сообщениях и беседах можно взять из полей `messages` и `conversations`, где содержатся данные из API.
 
-Если в ответе придет поле `more`, то после обработки всех событий нужно будет повторить запрос, указав в поле `pts` пришедший `new_pts`, а в поле `max_msg_id` `id` последнего полученного отсюда сообщения.
+Если в ответе придет поле `more`, то после обработки всех событий нужно будет повторить запрос, указав в поле `pts` пришедший `new_pts`.
 
 ## Структура сообщения
 
@@ -470,7 +469,7 @@ type LongPollEvent52 = [number, number,  number];
 В массиве `from_ids` иногда может появиться и ваш `id`, так что нужно проверять и удалять его из списка.
 
 ```ts
-//                     [peer_id, [from_ids], from_ids_count, timestamp]
+//                     [peer_id, from_ids[], from_ids_count, timestamp]
 type LongPollEvent63 = [number,  number[],   number,         number];
 ```
 
@@ -619,6 +618,8 @@ const mask = 1 | 2 | 32; // = 35
 Клавиатура для ботов представляет собой объект с описанием ее типа и кнопок.
 Основная структура представлена ниже, остальную информацию можно узнать в [документации](https://vk.com/dev/bots_docs_3?f=4.2.%20%D0%A1%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D0%B0%20%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85).
 ```ts
+// Типы у объекта клавиатуры:
+// https://github.com/danyadev/vk-desktop/blob/typescript/src/types/VKKeyboard.ts
 interface LongPollKeyboard {
   // Клавиатура для сообщения или для беседы
   inline?: true
