@@ -543,8 +543,8 @@ type LongPollEvent114 = [{
 [Callback-кнопки](https://vk.com/dev/bots_docs_5?f=4.4.+Callback-кнопки) работают следующим образом:
 
 1. Бот отправляет клавиатуру (обычную или инлайн), где находится callback-кнопка;
-2. Пользователь нажимает на эту кнопку и клиент вызывает метод `messages.sendMessageEvent`
-с указанием `peer_id` и `message_id`. Метод же возвращает строку, которая является `event_id`;
+2. Пользователь нажимает на эту кнопку и клиент вызывает метод `messages.sendMessageEvent` с указанием
+`peer_id`, `message_id` и `payload` (из кнопки). Метод же возвращает строку, которая является `event_id`;
 3. Бот получает событие `message_event` и вызывает метод [messages.sendMessageEventAnswer](https://vk.com/dev/messages.sendMessageEventAnswer);
 4. Этот метод вызывает `119` событие LongPoll у пользователя, где в `action` прописано действие, которое необходимо выполнить клиенту.
 
