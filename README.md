@@ -734,17 +734,19 @@ interface LongPollKeyboard {
 
 ### Вложения
 
-Список известных на данный момент вложений: `geo`, `doc`, `link`, `poll`, `wall`, `call`, `gift`, `story`, `photo`, `audio`, `video`, `event`, `market`, `artist`, `sticker`, `article`, `podcast`, `graffiti`, `wall_reply`, `audio_message`, `money_request`, `audio_playlist`, `group_call_in_progress`.
+Список известных на данный момент вложений: `geo`, `doc`, `link`, `poll`, `wall`, `call`, `gift`, `story`, `photo`, `audio`, `video`, `event`, `market`, `artist`, `sticker`, `article`, `podcast`, `graffiti`, `mini_app`, `wall_reply`, `audio_message`, `money_request`, `audio_playlist`, `group_call_in_progress`.
 
 Однако названия вложений, полученных через LongPoll, могут не совпадать с теми, что приходят через API:
 - `event`, приходящий в API, в LongPoll обозначается как `group`
 - `audio_message` и `graffiti` из LongPoll обозначаются как `doc`, но при этом добавляется ключ `attach*_kind` в ответе вложения со значением `audiomsg` или `graffiti`
 - `artist`, `audio_playlist` и `article`, которые приходят в LongPoll, через API отображаются как `link`
 
+Вложения `artist`, `audio_playlist`, `article` и `mini_app` приходят в API только через токен VK для Android.
+
 Вложение `geo` (прикрепленное местоположение) является еще одним исключением и приходит не как `attach*`, а просто как ключи `geo` и иногда `geo_provider`. Также при получении сообщения через [`messages.getById`](https://vk.com/dev/messages.getById) ключ `geo` будет находиться не во вложениях, а в "корне" сообщения.
 
-Сообщение с вложением `group_call_in_progress` создается, когда пользователь начинает групповой звонок. При окончании группового звонка
-сообщение с этим вложением удаляется и создается новое сообщение с вложением `call`.
+Сообщение с вложением `group_call_in_progress` создается, когда пользователь начинает групповой звонок.
+При окончании группового звонка сообщение с этим вложением удаляется и создается новое сообщение с вложением `call`.
 
 Пример вложений, состоящих из фотографии, документа и аудиозаписи:
 ```js
