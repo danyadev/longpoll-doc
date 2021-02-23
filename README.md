@@ -229,6 +229,7 @@ interface LongPollHistoryResult {
     // Есть пересланное сообщение или ответ на сообщение
     fwd?: '0_0'
     // Ответ на сообщение: '{"conversation_message_id":number}'
+    // Приходит только в 4 и 18 событиях
     reply?: string
 
     // Количество вложений в поле attachments
