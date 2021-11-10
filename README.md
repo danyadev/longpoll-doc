@@ -188,15 +188,15 @@ type LongPollHistoryMessageEvent = [
 
 ```ts
 type LongPollMessage = [
-  type: 3 | 4 | 5 | 18,
-  messageId: number,
-  flags: number,
-  peerId: number,
-  timestamp: number,
-  text: string,
+  type: 3 | 4 | 5 | 18, // 0
+  messageId: number, // 1
+  flags: number, // 2
+  peerId: number, // 3
+  timestamp: number, // 4
+  text: string, // 5
 
   // Объект приходит только при указании флага 2 при подключении к LongPoll
-  additional: {
+  additional: { // 6
     // ' ... ' приходит только в лс
     // '' приходит при редактировании любого сообщения
     // string приходит при написании в лс через vk.com с указанием темы
@@ -234,7 +234,7 @@ type LongPollMessage = [
   },
 
   // Объект приходит только при указании флага 2 при подключении к LongPoll
-  attachments: {
+  attachments: { // 7
     // Есть пересланное сообщение или ответ на сообщение
     fwd?: '0_0'
     // Ответ на сообщение: '{"conversation_message_id":number}'
@@ -254,11 +254,11 @@ type LongPollMessage = [
   },
 
   // Возвращается, если в mode есть флаг 128
-  randomId: number,
+  randomId: number, // 8
   // id сообщения относительно беседы
-  conversationMsgId: number,
+  conversationMsgId: number, // 9
   // 0 (не редактировалось) или timestamp (время редактирования)
-  updateTimestamp: number
+  updateTimestamp: number // 10
 ];
 ```
 
