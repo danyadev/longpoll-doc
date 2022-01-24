@@ -109,7 +109,7 @@ interface LongPollResult {
 
   // Приходят только при failed: 4
   min_version?: 0
-  max_version?: 14
+  max_version?: 15
 }
 ```
 
@@ -729,11 +729,14 @@ type Event90 = [
    - `number, > 0`, - Уведомления выключены до указанного `timestamp`
 
 ```ts
-type Event114 = [{
-  peer_id: number
-  sound: 0 | 1
-  disabled_until: 0 | -1 | number
-}];
+type Event114 = [
+  type: 114,
+  data: {
+    peer_id: number
+    sound: 0 | 1
+    disabled_until: 0 | -1 | number
+  }
+];
 ```
 
 ### Событие 115. Звонок
@@ -776,27 +779,30 @@ interface MessagesSendMessageEventParams {
 Если за минуту бот так и не пришлет событие, то ожидание ответа следует прекратить.
 
 ```ts
-type Event119 = [{
-  // Отрицательный ID бота, который ответил на клик по кнопке
-  owner_id: number
-  // ID беседы, в которой находится сообщение
-  peer_id: number
-  // Уникальный ID события, действующий 1 минуту.
-  // Нужен для идентификации кликнутой кнопки
-  event_id: string
-  // Не приходит, если не нужно выполнять никакое действие
-  // т.е. бот отправил пустой payload или неизвестный тип действия
-  action?:
-    // Показать снекбар с текстом `text`
-    | { type: 'show_snackbar', text: string }
-    // Открыть ссылку `link`
-    | { type: 'open_link', link: string }
-    // Открыть приложение по ссылке
-    // https://vk.com/app${app_id}_${owner_id}#${hash}
-    // https://vk.com/app${app_id}_${owner_id} (если hash = '')
-    // https://vk.com/app${app_id} (если owner_id = undefined и hash = '')
-    | { type: 'open_app', app_id: number, owner_id?: number, hash: string }
-}];
+type Event119 = [
+  type: 119,
+  data: {
+    // Отрицательный ID бота, который ответил на клик по кнопке
+    owner_id: number
+    // ID беседы, в которой находится сообщение
+    peer_id: number
+    // Уникальный ID события, действующий 1 минуту.
+    // Нужен для идентификации кликнутой кнопки
+    event_id: string
+    // Не приходит, если не нужно выполнять никакое действие
+    // т.е. бот отправил пустой payload или неизвестный тип действия
+    action?:
+      // Показать снекбар с текстом `text`
+      | { type: 'show_snackbar', text: string }
+      // Открыть ссылку `link`
+      | { type: 'open_link', link: string }
+      // Открыть приложение по ссылке
+      // https://vk.com/app${app_id}_${owner_id}#${hash}
+      // https://vk.com/app${app_id}_${owner_id} (если hash = '')
+      // https://vk.com/app${app_id} (если owner_id = undefined и hash = '')
+      | { type: 'open_app', app_id: number, owner_id?: number, hash: string }
+  }
+];
 ```
 
 ## Дополнительная информация
@@ -1003,7 +1009,7 @@ interface LongPollKeyboard {
 - `graffiti` и `audio_message` из LongPoll обозначаются как `doc`, но при этом добавляется ключ `attach*_kind` со значением `graffiti` или `audiomsg`
 - `artist`, `article`, `narrative` и `audio_playlist`, которые приходят в LongPoll, через API отображаются как `link`
 - `mini_app` не приходит в LongPoll, вместо него приходит `link`
-- `narrative` не приходит в API даже с токеном VK для Android
+- `narrative` приходят в API начиная с версии `5.154`
 
 Вложения `artist`, `article`, `mini_app` и `audio_playlist` приходят в API только через токен VK для Android.
 
