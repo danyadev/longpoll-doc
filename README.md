@@ -1039,7 +1039,8 @@ const longpollAttachments = {
 и анализа списка вложений, чтобы в случае необходимости получить сообщение через [API](https://vk.com/dev/messages.getById).
 
 <details>
-<summary>Пример кода для получения массива с названиями вложений</summary>
+<summary markdown="span">Пример кода для получения массива с названиями вложений
+</summary>
 
 ```js
 function getAttachments(data) {
