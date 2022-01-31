@@ -609,6 +609,7 @@ type Event51 = [
 | 18  | Контакт или юзера пригласили в чат                             | `contactId` или `userId`    |
 | 19  | Начало или окончание группового звонка                         | `1` в начале, `0` в конце   |
 | 22  | Чат больше не новый: пришло первое сообщение (только в лс)     | `0`                         |
+| 23  | Изменено оформление чата                                       |
 
 При изменении названия (`1`) и обновлении аватарки беседы (`2`) нужные данные можно взять из
 [сервисного сообщения](#сервисные-сообщения) в [4 событии](#событие-4-новое-сообщение).
@@ -659,6 +660,8 @@ type Event63 = [
 Идентичен [событию 63](#событие-63-статус-набора-сообщения).
 
 ### Событие 80. Изменение количества непрочитанных диалогов
+
+Все счетчики возвращаются без учета сообщений в архиве
 
 ```ts
 type Event80 = [
@@ -880,32 +883,32 @@ const mask = 1 | 2 | 32; // = 35
   </tr>
 
   <tr>
-    <td><code>chat_create</code> - Создание беседы</td>
+    <td><code>chat_create</code><br>Создание беседы</td>
     <td>
       <code>source_text</code> - название беседы
     </td>
   </tr>
 
   <tr>
-    <td><code>chat_photo_update</code> - Обновление фотографии беседы</td>
+    <td><code>chat_photo_update</code><br>Обновление фотографии беседы</td>
     <td>Фото можно получить во вложении сообщения</td>
   </tr>
 
   <tr>
-    <td><code>chat_photo_remove</code> - Удаление фотографии беседы</td>
+    <td><code>chat_photo_remove</code><br>Удаление фотографии беседы</td>
     <td></td>
   </tr>
 
   <tr>
-    <td><code>chat_title_update</code> - Обновление названия беседы</td>
+    <td><code>chat_title_update</code><br>Обновление названия беседы</td>
     <td>
-      <code>source_old_text</code> - старое название беседы (нет в API)<br>
+      <code>source_old_text</code> - старое название беседы (не приходит в API)<br>
       <code>source_text</code> - новое название беседы
     </td>
   </tr>
 
   <tr>
-    <td><code>chat_pin_message</code> - Закрепление сообщения</td>
+    <td><code>chat_pin_message</code><br>Закрепление сообщения</td>
     <td>
       <code>source_mid</code> - <code>id</code> закрепившего сообщение<br>
       <code>source_message</code> - обрезанное закрепленное сообщение<br>
@@ -914,7 +917,7 @@ const mask = 1 | 2 | 32; // = 35
   </tr>
 
   <tr>
-    <td><code>chat_unpin_message</code> - Открепление сообщения</td>
+    <td><code>chat_unpin_message</code><br>Открепление сообщения</td>
     <td>
       <code>source_mid</code> - <code>id</code> открепившего сообщение<br>
       <code>source_chat_local_id</code> - локальный <code>id</code> сообщения
@@ -922,33 +925,38 @@ const mask = 1 | 2 | 32; // = 35
   </tr>
 
   <tr>
-    <td><code>chat_invite_user</code> - Вступление в беседу</td>
+    <td><code>chat_invite_user</code><br>Вступление в беседу</td>
     <td>
       <code>source_mid</code> - <code>id</code> вступившего в беседу
     </td>
   </tr>
 
   <tr>
-    <td><code>chat_invite_user_by_link</code> - Вступление в беседу по ссылке</td>
+    <td><code>chat_invite_user_by_link</code><br>Вступление в беседу по ссылке</td>
     <td></td>
   </tr>
 
   <tr>
-    <td><code>chat_kick_user</code> - Выход или исключение из беседы</td>
+    <td><code>chat_kick_user</code><br>Выход или исключение из беседы</td>
     <td>
       <code>source_mid</code> - <code>id</code> вышедшего или исключенного
     </td>
   </tr>
 
   <tr>
-    <td><code>chat_screenshot</code> - Создание скриншота с фантомным сообщением</td>
+    <td><code>chat_kick_don</code><br>Исключение дона из беседы</td>
+    <td>Приходит, начиная с версии API `5.154`</td>
+  </tr>
+
+  <tr>
+    <td><code>chat_screenshot</code><br>Создание скриншота с фантомным сообщением</td>
     <td>
       <code>source_mid</code> - <code>id</code> создавшего скриншот
     </td>
   </tr>
 
   <tr>
-    <td><code>chat_group_call_started</code> - Начало группового звонка в беседе</td>
+    <td><code>chat_group_call_started</code><br>Начало группового звонка в беседе</td>
     <td>
       <b>Больше не приходит в LongPoll</b><br>
       Вместо него создается сообщение с вложением <code>group_call_in_progress</code><br>
@@ -957,21 +965,30 @@ const mask = 1 | 2 | 32; // = 35
   </tr>
 
   <tr>
-    <td><code>chat_invite_user_by_call</code> - Приглашение пользователя в звонок</td>
+    <td><code>chat_invite_user_by_call</code><br>Приглашение пользователя в звонок</td>
     <td>
       <code>source_mid</code> - <code>id</code> приглашенного юзера
     </td>
   </tr>
 
   <tr>
-    <td><code>chat_invite_user_by_call_join_link</code> - Присоединение пользователя к звонку по ссылке</td>
+    <td><code>chat_invite_user_by_call_join_link</code><br>Присоединение пользователя к звонку по ссылке</td>
     <td></td>
   </tr>
 
   <tr>
-    <td><code>chat_invite_user_by_message_request</code> - запрос на добавление в беседу</td>
+    <td><code>chat_invite_user_by_message_request</code><br>Запрос на добавление в беседу</td>
     <td>
-      <code>source_mid</code> - <code>id</code> пригласившего в беседу<br>
+      <code>source_mid</code> - <code>id</code> пригласившего в беседу
+    </td>
+  </tr>
+
+  <tr>
+    <td><code>conversation_style_update</code><br>Обновление стиля беседы</td>
+    <td>
+      <code>source_style</code> - название стиля<br>
+      Поле не приходит в случае сброса стиля<br>
+      Возможные варианты можно посмотреть [здесь](https://laney.elor.top/v1/chat_themes.json)
     </td>
   </tr>
 </table>
