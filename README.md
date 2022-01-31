@@ -467,6 +467,8 @@ type Event10 = [
 
 `1 << 22` (`4194304`) - Беседа в статусе входящего запроса на переписку (наличие флага `8` или `9`)
 
+`1 << 23` (`8388608`) - Беседа помещена в архив
+
 `1 << 24` (`16777216`) - Беседа, в которой идет звонок
 
 `1 << 26` (`67108864`) - Признак того, что это чат
@@ -674,10 +676,12 @@ type Event80 = [
   headerUnreadCount: number,
   // Количество непрочитанных незамьюченных бесед в мессенджере в шапке
   headerUnreadUnmutedCount: number,
-  // Вскоре они перестанут быть нулями и станут обозначать счетчики для какой-то фичи...
-  0,
-  0,
-  0
+  // Количество непрочитанных бесед в архиве
+  archiveUnreadCount: number,
+  // Количество непрочитанных незамьюченных бесед в архиве
+  archiveUnreadUnmutedCount: number,
+  // Количество бесед с упоминаниями в архиве
+  archiveMentionsCount: number
 ];
 ```
 
@@ -1002,7 +1006,7 @@ interface LongPollKeyboard {
 
 #### Список существующих вложений
 
-Список известных на данный момент вложений: `geo`, `doc`, `link`, `poll`, `wall`, `call`, `gift`, `story`, `photo`, `audio`, `video`, `event`, `market`, `artist`, `sticker`, `article`, `podcast`, `curator`, `graffiti`, `mini_app`, `narrative`, `wall_reply`, `audio_message`, `money_request`, `audio_playlist`, `group_call_in_progress`.
+Список известных на данный момент вложений: `geo`, `doc`, `link`, `poll`, `wall`, `call`, `gift`, `story`, `photo`, `audio`, `video`, `event`, `market`, `artist`, `widget`, `sticker`, `article`, `podcast`, `curator`, `graffiti`, `mini_app`, `narrative`, `wall_reply`, `audio_message`, `money_request`, `audio_playlist`, `group_call_in_progress`.
 
 Однако названия вложений, полученных через LongPoll, могут не совпадать с теми, что приходят через API:
 - `event`, приходящий в API, в LongPoll обозначается как `group`
