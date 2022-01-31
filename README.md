@@ -988,7 +988,8 @@ const mask = 1 | 2 | 32; // = 35
     <td>
       <code>source_style</code> - название стиля<br>
       Поле не приходит в случае сброса стиля<br>
-      Возможные варианты можно посмотреть [здесь](https://laney.elor.top/v1/chat_themes.json)
+      Возможные варианты можно посмотреть
+      <a href="https://laney.elor.top/v1/chat_themes.json">здесь</a>
     </td>
   </tr>
 </table>
