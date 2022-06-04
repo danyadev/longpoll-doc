@@ -903,7 +903,7 @@ const mask = 1 | 2 | 32; // = 35
   <tr>
     <td><code>chat_title_update</code><br>Обновление названия беседы</td>
     <td>
-      <code>source_old_text</code> - старое название беседы (не приходит в API)<br>
+      <code>source_old_text</code> - старое название беседы<br>
       <code>source_text</code> - новое название беседы
     </td>
   </tr>
