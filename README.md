@@ -277,8 +277,9 @@ type LongPollMessage = [
 ```ts
 type LongPollMessageShort = [
   type: 10003 | 10004 | 10005 | 10018,
-  messageId: number,
+  conversationMsgId: number,
   flags: number
+  messageId: number,
 ];
 ```
 
