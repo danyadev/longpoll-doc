@@ -170,6 +170,7 @@ interface LongPollHistoryResult {
 
 Структура этих событий выглядит так:
 ```ts
+// TODO: да, здесь приходят такие события, а не 10000 + type
 type LongPollHistoryMessageEvent = [
   type: 3 | 4 | 5 | 18,
   messageId: number,
@@ -209,25 +210,22 @@ type LongPollMessage = [
 
   // Объект приходит только при указании флага 2 при подключении к LongPoll
   additional: {
-    // ' ... ' приходит только в лс
-    // '' приходит при редактировании любого сообщения
-    // string приходит при написании в лс через vk.com с указанием темы
     // Устаревшее поле, не следует использовать
-    title?: ' ... ' | '' | string
+    title?: string
     // Наличие emoji в сообщении
     emoji?: '1'
     // id автора сообщения. Приходит только в беседах
     from?: string
     // Наличие шаблона (для получения шаблона нужно получить сообщение из API)
     has_template?: '1'
-    marked_users?: [
+    marked_users?: Array<
       // Список упомянутых людей, @online, ответ на сообщение
       | [1, number[]]
       // @all
       | [1, 'all']
       // Исчезающее сообщение в обычном чате
       | [2, 'all']
-    ]
+    >
     // Клавиатура для ботов (для беседы или сообщения)
     keyboard?: MessageKeyboard
     // Количество секунд до исчезновения сообщения в обычном чате
@@ -282,11 +280,18 @@ type LongPollMessage = [
 которое удалит сообщение с вашей стороны, если оно уже было сохранено
 
 ```ts
-// TODO: проверить, что приходит на самом деле
 type LongPollMessageShort = [
-  type: 10003 | 10004 | 10005 | 10018,
+  type: 10004,
   conversationMessageId: number,
-  flags: number
+  flags: number,
+  messageId: number
+];
+
+type LongPollMessageShort = [
+  type: 10003 | 10005 | 10018,
+  conversationMessageId: number,
+  flags: number,
+  peerId: number
 ];
 ```
 
