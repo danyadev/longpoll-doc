@@ -601,16 +601,16 @@ type Event21 = [
 
 Это событие приходит, если пользователь запросил перевод сообщения. Для этого надо выполнить метод `messages.translate` (доступен только официальным клиентам, параметры см. ниже). Метод возвращает `1`.
 
-Если для определённого сообщения перевод запрашивается в первый раз, то вместе с событием `50` приходит и событие `18`, где в объекте `additional` будет поле `is_translated`.
+Если для определённого сообщения перевод запрашивается в первый раз, то вместе с событием `50` приходит и [событие `10018`](#событие-10018-обновление-сообщения), где в объекте `additional` будет поле `is_translated`.
 
 ```ts
 type Event50 = [
   type: 50,
   data: {
-    peer_id: number;
-    cmid: number;
-    translation: string;
-    language: string;
+    peer_id: number,
+    cmid: number,
+    translation: string,
+    language: string
   }
 ];
 ```
@@ -628,8 +628,8 @@ type Event50 = [
 Параметры метода `messages.translate`:
 ```ts
 interface MessagesTranslateParams {
-  peer_id: number
-  cmids: number[]
+  peer_id: number,
+  cmids: string,
   language: string
 }
 ```
