@@ -1130,7 +1130,7 @@ const mask = 1 | 2 | 32; // = 35
       <code>source_style</code> - название стиля<br>
       Поле не приходит в случае сброса стиля<br>
       Возможные варианты можно посмотреть
-      <a href="https://elorucov.github.io/laney/v1/chat_themes.json">здесь</a>
+      <a href="https://elorucov.github.io/laney/v2/chat_styles.json">здесь</a>, либо вызвав метод <code>messages.enumerateAppearances</code> (доступен только официальным приложениям)
     </td>
   </tr>
 </table>
