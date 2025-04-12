@@ -955,7 +955,7 @@ type Event601 = [
   conversationMessageId: number,
   myReactionId: number,
   reactionsCount: number,
-  ...data: number
+  ...data: number[]
 ];
 ```
 
@@ -968,7 +968,7 @@ type Event601 = [
   peerId: number,
   conversationMessageId: number,
   reactionsCount: number,
-  ...data: number
+  ...data: number[]
 ];
 ```
 
