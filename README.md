@@ -7,7 +7,7 @@ __Long Polling__ — это технология, которая позволя�
 
 Немного подробнее о технологии можно почитать [здесь](https://learn.javascript.ru/long-polling).
 
-Документация написана для __19__ версии LongPoll.
+Документация написана для __21__ версии LongPoll.
 
 ## План документации:
 
@@ -59,6 +59,7 @@ __Long Polling__ — это технология, которая позволя�
    - [Событие 602. Обновление непрочитанных реакций в беседе](#событие-602-обновление-непрочитанных-реакций-в-беседе)
 5. [Дополнительная информация](#дополнительная-информация)
    - [Флаги сообщений](#флаги-сообщений)
+   - [Флаги бесед](#флаги-бесед)
    - [Сервисные сообщения](#сервисные-сообщения)
    - [Клавиатура для ботов](#клавиатура-для-ботов)
    - [Вложения](#вложения)
@@ -112,7 +113,7 @@ type LongPollResult =
   // Ключ инвалидировался. Необходимо получить новый key, используя метод messages.getLongPollServer
   | { failed: 2, error: string }
   // Указана неверная версия лонгполла
-  | { failed: 4, min_version: 0, max_version: 19 }
+  | { failed: 4, min_version: 0, max_version: 21 }
 ```
 
 После обработки ответа нужно повторить запрос, но с новым значением `ts`.
@@ -293,7 +294,7 @@ type LongPollMessageShort = [
 ```ts
 type Event10002 = [
   type: 10002,
-  messageId: number,
+  conversationMessageId: number,
   flags: number,
   peerId: number
 ];
@@ -312,7 +313,7 @@ type Event10002 = [
 ```ts
 type Event10003 = [
   type: 10003,
-  messageId: number,
+  conversationMessageId: number,
   flags: number,
   peerId: number
 ] | LongPollMessage;
@@ -336,28 +337,28 @@ type Event10005 = LongPollMessage;
 
 ### Событие 10006. Прочтение входящих сообщений
 
-Вы прочитали в диалоге `peer_id` сообщения до `msg_id` включительно.  
+Вы прочитали в диалоге `peerId` сообщения до `conversationMessageId` включительно.  
 `count` - количество непрочитанных сообщений в диалоге.
 
 ```ts
 type Event10006 = [
   type: 10006,
   peerId: number,
-  messageId: number,
+  conversationMessageId: number,
   count: number
 ];
 ```
 
 ### Событие 10007. Прочтение исходящих сообщений
 
-Собеседник прочитал в диалоге `peer_id` сообщения до `msg_id` включительно.  
+Собеседник прочитал в диалоге `peerId` сообщения до `conversationMessageId` включительно.  
 `count` - количество __ваших__ непрочитанных сообщений в диалоге.
 
 ```ts
 type Event10007 = [
   type: 10007,
   peerId: number,
-  messageId: number,
+  conversationMessageId: number,
   count: number
 ];
 ```
@@ -446,13 +447,13 @@ type Event12 = [
 
 ### Событие 10013. Удаление всех сообщений в диалоге
 
-В беседе `peerId` были удалены все сообщения до `messageId` включительно.
+В беседе `peerId` были удалены все сообщения до `conversationMessageId` включительно.
 
 ```ts
 type Event10013 = [
   type: 10013,
   peerId: number,
-  messageId: number
+  conversationMessageId: number
 ];
 ```
 
@@ -479,7 +480,8 @@ type Event10018 = LongPollMessage;
 ```ts
 type Event10019 = [
   type: 10019,
-  messageId: number
+  conversationMessageId: number,
+  peerId: number
 ];
 ```
 
